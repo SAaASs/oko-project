@@ -1,0 +1,16 @@
+.controll-panel {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 40px;
+    height: 100px;
+    align-items: center;
+}
+.controll-panel__button {
+    width: 150px;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    background-color: rgb(41,70,160);
+    color: white;
+}

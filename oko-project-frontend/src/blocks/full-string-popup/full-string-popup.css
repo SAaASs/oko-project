@@ -1,0 +1,80 @@
+.full-string-popup__wrapper {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+.full-string-popup {
+    margin-top: 50px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    border: 5px solid #3456F3;
+    border-radius: 10px;
+    position: relative;
+}
+.full-string-popup__submit-button {
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background-color: #3456F3;
+    color: white;
+    width: 200px;
+    height: 50px;
+}
+.full-string-popup__submit-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.full-string-popup__close-button {
+    position: absolute;
+    top: -52px;
+    right: -52px;
+    border: none;
+    outline: none;
+    background: transparent;
+    background-image: url('../../images/dick-butt-оригинал-1.jpg');
+    background-position: center;
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.full-string-popup-field__name {
+    font-family: Inter;
+    font-size: 14px;
+}
+.full-string-popup-field__input {
+    border: none;
+    border-bottom: solid 1px black;
+    outline: none;
+    padding: 10px 0px 10px 0px;
+    width: 80%;
+}
+.full-string-popup-field__error {
+    font-size: 10px;
+    font-family: Inter;
+    color: red;
+}
+.full-string-popup-field__category {
+    padding-left: 10px;
+}
+.full-string-popup__category-name {
+    font-family: Inter;
+    font-size: 16px;
+    padding: 10px 0px 10px 0px;
+}
+.full-string-popup-field__wrapper {
+    padding: 10px 0px 10px 15px;
+}

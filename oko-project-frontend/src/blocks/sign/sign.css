@@ -1,0 +1,28 @@
+.sign{
+    height: 90vh;
+    margin: auto;
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.sign__form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+}
+.sign__form-input{
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    height: 35px;
+}
+.sign__form-button{
+    height: 40px;
+    background-color: rgb(41,70,160);
+    color: white;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+}

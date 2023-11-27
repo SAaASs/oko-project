@@ -1,0 +1,42 @@
+.big-journal-note {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-family: Inter;
+    font-size: 25px;
+    background-color:#53545C;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    align-items: center;
+    width: 600px;
+}
+.big-journal-note__id {
+    height: max-content;
+}
+.big-journal-note__date {
+    height: max-content;
+}
+.kostyl {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.big-journal-note__expand {
+    background-color: rgb(41,70,160);
+    color: white;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    font-family: Inter;
+    font-size: 20px;
+    cursor: pointer;
+}
+.big-journal__header {
+    width: 633px;
+    padding-left: 30px;
+    font-family: Inter;
+    padding-bottom: 20px;
+}
