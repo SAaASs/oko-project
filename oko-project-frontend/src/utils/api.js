@@ -65,15 +65,17 @@ export class MainApi {
       body: JSON.stringify(data),
     }).then(this._checkResponse);
   }
-  patchBigNote(data) {
-    return fetch(this._baseUrl + 'notes/big', {
+  patchBigNote(data, noteId) {
+    console.log(noteId);
+    return fetch(this._baseUrl + `notes/big/${noteId}`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify(data),
     }).then(this._checkResponse);
   }
-  patchSmallNote(data) {
-    return fetch(this._baseUrl + 'notes/small', {
+  patchSmallNote(data, noteId) {
+    console.log(noteId);
+    return fetch(this._baseUrl + `notes/small/${noteId}`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify(data),

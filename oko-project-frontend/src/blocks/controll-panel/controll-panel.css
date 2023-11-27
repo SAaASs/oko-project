@@ -13,4 +13,10 @@
     height: 40px;
     background-color: rgb(41,70,160);
     color: white;
+    cursor: pointer;
+}
+.controll-panel__button-picked {
+    border: 2px solid rgb(41,70,160);
+    background-color: white;
+    color: rgb(41,70,160);
 }

@@ -10,3 +10,11 @@ module.exports.getAllBJNs = (req, res, next) => {
     res.send(notes);
   });
 };
+module.exports.updateBJN = (req, res, next) => {
+  // console.log('pinus', req.params);
+  BigJournalNote.findByIdAndUpdate(req.params.noteId, req.body, {
+    runValidators: true,
+  }).then((result) => {
+    res.send(result);
+  });
+};

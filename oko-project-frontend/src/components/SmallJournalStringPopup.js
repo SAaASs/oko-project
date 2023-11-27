@@ -1,8 +1,10 @@
 import React from 'react';
 import { PickedNoteContext } from '../contexts/PickedNoteContext';
 import PopupField from './PopupField';
+import { api } from '../utils/api';
 function SmallJournalStringPopup() {
   const pickedNote = React.useContext(PickedNoteContext);
+  const [noteNumber, setNoteNumber] = React.useState('');
   const [diagramId, setDiagramId] = React.useState('');
   const [pressEquipDate, setPressEquipDate] = React.useState('');
   const [pairId, setPairId] = React.useState('');
@@ -18,6 +20,55 @@ function SmallJournalStringPopup() {
     React.useState('');
   const [goodOrBad, setGoodOrBad] = React.useState('');
   const [mastersAcception, setMastersAcception] = React.useState('');
+  React.useEffect(() => {
+    setNoteNumber(pickedNote.currentNote.noteNumber);
+    setDiagramId(pickedNote.currentNote.diagramId);
+    setPressEquipDate(pickedNote.currentNote.pressEquipDate);
+    setPairId(pickedNote.currentNote.pairId);
+    setPairFullMarkLeft(pickedNote.currentNote.pairFullMarkLeft);
+    setPairFullMarkRight(pickedNote.currentNote.pairFullMarkRight);
+    setHubDiameterLeft(pickedNote.currentNote.hubDiameterLeft);
+    setHubDiameterRight(pickedNote.currentNote.hubDiameterRight);
+    setTensionLeft(pickedNote.currentNote.tensionLeft);
+    setTensionRight(pickedNote.currentNote.tensionRight);
+    setPressurePowerUpLeft(pickedNote.currentNote.pressurePowerUpLeft);
+    setPressurePowerUpRight(pickedNote.currentNote.pressurePowerUpRight);
+    setDistanceBetweenInnerAndSide(
+      pickedNote.currentNote.distanceBetweenInnerAndSide
+    );
+    setGoodOrBad(pickedNote.currentNote.goodOrBad);
+    setMastersAcception(pickedNote.currentNote.mastersAcception);
+  }, [pickedNote.currentNote]);
+  const editHandler = () => {
+    const result = {
+      noteNumber,
+      diagramId,
+      pressEquipDate,
+      pairId,
+      pairFullMarkLeft,
+      pairFullMarkRight,
+      hubDiameterLeft,
+      hubDiameterRight,
+      tensionLeft,
+      tensionRight,
+      pressurePowerUpLeft,
+      pressurePowerUpRight,
+      distanceBetweenInnerAndSide,
+      goodOrBad,
+      mastersAcception,
+    };
+    if (pickedNote.currentMode == 'create') {
+      api.createSmallNote(result).then(() => {
+        alert('Запись успешно создана');
+        pickedNote.setIsSmallPopupOpened(false);
+      });
+    } else if (pickedNote.currentMode == 'edit') {
+      api.patchSmallNote(result, pickedNote.currentNote._id).then(() => {
+        alert('Запись успешно изменена');
+        pickedNote.setIsSmallPopupOpened(false);
+      });
+    }
+  };
   return (
     <>
       <section className="full-string-popup__wrapper">
@@ -28,7 +79,20 @@ function SmallJournalStringPopup() {
             }}
             className="full-string-popup__close-button"
           ></button>
-          <form className="full-string-popup__form">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              editHandler();
+            }}
+            className="full-string-popup__form"
+          >
+            <PopupField
+              inputValue={noteNumber}
+              inputValueChanger={setNoteNumber}
+              inputName={'Номер по порядку'}
+              inputFormName={'noteNumber'}
+              regexp={''}
+            ></PopupField>
             <PopupField
               inputValue={diagramId}
               inputValueChanger={setDiagramId}

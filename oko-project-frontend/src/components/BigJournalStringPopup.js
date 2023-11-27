@@ -2,9 +2,9 @@ import React from 'react';
 import { PickedNoteContext } from '../contexts/PickedNoteContext';
 import PopupField from './PopupField';
 import PopupFieldWrapper from './PopupFieldWrapper';
+import { api } from '../utils/api';
 function FullStringPopup() {
   const pickedNote = React.useContext(PickedNoteContext);
-  console.log(pickedNote.currentNote);
   const [noteNumber, setNoteNumber] = React.useState(
     pickedNote.currentNote.noteNumber
   );
@@ -229,8 +229,9 @@ function FullStringPopup() {
     setSignatureWheelsetReprofiling(
       pickedNote.currentNote.signatureWheelsetReprofiling
     );
-  }, []);
+  }, [pickedNote.currentNote]);
   const editHandler = () => {
+    console.log('editHandler');
     const result = {
       noteNumber,
       arrivalDate,
@@ -272,9 +273,23 @@ function FullStringPopup() {
       otherWorks,
       fullInspectionDate,
       signatureForDefectsNeckAndSomeOtherThing,
+      signatureForDefectsHalfHubAxis,
+      signatureForDefectsInnerRingsOnAxisNeck,
+      signatureForDefectsMiddleAxisPart,
       signatureWheelsetAcceptance,
       signatureWheelsetReprofiling,
     };
+    if (pickedNote.currentMode == 'create') {
+      api.createBigNote(result).then(() => {
+        alert('Запись успешно создана');
+        pickedNote.setIsBigPopupOpened(false);
+      });
+    } else if (pickedNote.currentMode == 'edit') {
+      api.patchBigNote(result, pickedNote.currentNote._id).then(() => {
+        alert('Запись успешно изменена');
+        pickedNote.setIsBigPopupOpened(false);
+      });
+    }
   };
 
   return (
@@ -290,6 +305,7 @@ function FullStringPopup() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              console.log('submit');
               editHandler();
             }}
             className="full-string-popup__form"

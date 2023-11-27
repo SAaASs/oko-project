@@ -11,10 +11,10 @@ module.exports.getAllSJNs = (req, res, next) => {
   });
 };
 module.exports.updateSJN = (req, res, next) => {
-  console.log(req.body);
-  SmallJournalNote.findByIdAndUpdate([req.body], { runValidators: true }).then(
-    (movie) => {
-      res.send(movie[0]);
-    },
-  );
+  // console.log('pinus', req.params);
+  SmallJournalNote.findByIdAndUpdate(req.params.noteId, req.body, {
+    runValidators: true,
+  }).then((result) => {
+    res.send(result);
+  });
 };

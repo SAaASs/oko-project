@@ -9,75 +9,74 @@ import { api } from '../utils/api';
 function Journals() {
   const [bigJournalNoteList, setBigJournalNoteList] = React.useState([]);
   const [smallJournalNoteList, setSmallJournalNoteList] = React.useState([]);
-  const plug = [
-    {
-      noteNumber: '3109',
-      arrivalDate: '01.12.2023',
-      soureceName: '',
-      type: '',
-      pairId: '564359847589',
-      assemblyDate: '',
-      lastFormationDate: '',
-      lastExaminationDate: '',
-      wheelDiameterLeft: '',
-      wheelDiameterRight: '',
-      dateOfDispatchOrReleaseOnBail: '',
-      destination: '',
-      axisAnteriorPartLeft: '',
-      axisAnteriorPartRight: '',
-      axisHubPartLeft: '',
-      axisHubPartRight: '',
-      axisMiddlePartLeft: '',
-      axisMiddlePartRight: '',
-      wheelRimThicknessLeft: '',
-      wheelRimThicknessRight: '',
-      wheelRollingLeft: '',
-      wheelRollingRight: '',
-      wheelDiscThicknessLeft: '',
-      wheelDiscThicknessRight: '',
-      wheelRidgeThicknessLeft: '',
-      wheelRidgeThicknessRight: '',
-      rollingCircleDiameterLeft: '',
-      rollingCircleDiameterRight: '',
-      distanceBetweenInternalEdges: '',
-      repairAxisChange: '',
-      repairSolidRolledChange: '',
-      repairFormedFromOldWheels: '',
-      completeInspectionOfRollerAxleBoxesWithTurning: '',
-      completeInspectionOfRollerAxleBoxesWithoutTurning: '',
-      restorationOfTheRollerAxleJournalThread: '',
-      intermediateRevisionOfRollerAxleBoxesWithTurning: '',
-      intermediateRevisionOfRollerAxleBoxesWithoutTurning: '',
-      otherWorks: '',
-      fullInspectionDate: '',
-      signatureForDefectsNeckAndSomeOtherThing: '',
-      signatureForDefectsHalfHubAxis: '',
-      signatureForDefectsInnerRingsOnAxisNeck: '',
-      signatureForDefectsMiddleAxisPart: '',
-      signatureWheelsetAcceptance: '',
-      signatureWheelsetReprofiling: '',
-    },
-  ];
-  const smolPlug = [
-    {
-      noteNumber: '3109',
-      diagramId: '76588475',
-      pressEquipDate: '02.12.2023',
-      pairId: '57847887858',
-      pairFullMarkLeft: '',
-      pairFullMarkRight: '',
-      hubDiameterLeft: '',
-      hubDiameterRight: '',
-      tensionLeft: '',
-      tensionRight: '',
-      pressurePowerUpLeft: '',
-      pressurePowerUpRight: '',
-      distanceBetweenInnerAndSide: '',
-      goodOrBad: '',
-      mastersAcception: '',
-    },
-  ];
-  const [currentNote, setCurrentNote] = React.useState(plug);
+  const emptyBJN = {
+    noteNumber: '',
+    arrivalDate: '',
+    soureceName: '',
+    type: '',
+    pairId: '',
+    assemblyDate: '',
+    lastFormationDate: '',
+    lastExaminationDate: '',
+    wheelDiameterLeft: '',
+    wheelDiameterRight: '',
+    dateOfDispatchOrReleaseOnBail: '',
+    destination: '',
+    axisAnteriorPartLeft: '',
+    axisAnteriorPartRight: '',
+    axisHubPartLeft: '',
+    axisHubPartRight: '',
+    axisMiddlePartLeft: '',
+    axisMiddlePartRight: '',
+    wheelRimThicknessLeft: '',
+    wheelRimThicknessRight: '',
+    wheelRollingLeft: '',
+    wheelRollingRight: '',
+    wheelDiscThicknessLeft: '',
+    wheelDiscThicknessRight: '',
+    wheelRidgeThicknessLeft: '',
+    wheelRidgeThicknessRight: '',
+    rollingCircleDiameterLeft: '',
+    rollingCircleDiameterRight: '',
+    distanceBetweenInternalEdges: '',
+    repairAxisChange: '',
+    repairSolidRolledChange: '',
+    repairFormedFromOldWheels: '',
+    completeInspectionOfRollerAxleBoxesWithTurning: '',
+    completeInspectionOfRollerAxleBoxesWithoutTurning: '',
+    restorationOfTheRollerAxleJournalThread: '',
+    intermediateRevisionOfRollerAxleBoxesWithTurning: '',
+    intermediateRevisionOfRollerAxleBoxesWithoutTurning: '',
+    otherWorks: '',
+    fullInspectionDate: '',
+    signatureForDefectsNeckAndSomeOtherThing: '',
+    signatureForDefectsHalfHubAxis: '',
+    signatureForDefectsInnerRingsOnAxisNeck: '',
+    signatureForDefectsMiddleAxisPart: '',
+    signatureWheelsetAcceptance: '',
+    signatureWheelsetReprofiling: '',
+  };
+
+  const emptySJN = {
+    noteNumber: '',
+    diagramId: '',
+    pressEquipDate: '',
+    pairId: '',
+    pairFullMarkLeft: '',
+    pairFullMarkRight: '',
+    hubDiameterLeft: '',
+    hubDiameterRight: '',
+    tensionLeft: '',
+    tensionRight: '',
+    pressurePowerUpLeft: '',
+    pressurePowerUpRight: '',
+    distanceBetweenInnerAndSide: '',
+    goodOrBad: '',
+    mastersAcception: '',
+  };
+
+  const [currentNote, setCurrentNote] = React.useState();
+  const [currentMode, setCurrentMode] = React.useState('edit');
   const [isBigPopupOpened, setIsBigPopupOpened] = React.useState(false);
   const [isSmallPopupOpened, setIsSmallPopupOpened] = React.useState(false);
   const [currentJournalName, setCurrentJournalName] =
@@ -98,6 +97,8 @@ function Journals() {
           setIsBigPopupOpened,
           isSmallPopupOpened,
           setIsSmallPopupOpened,
+          currentMode,
+          setCurrentMode,
         }}
       >
         {isBigPopupOpened && <FullStringPopup></FullStringPopup>}
@@ -110,7 +111,11 @@ function Journals() {
             onClick={() => {
               setCurrentJournalName('smallJournal');
             }}
-            className="controll-panel__button"
+            className={
+              currentJournalName == 'smallJournal'
+                ? 'controll-panel__button controll-panel__button-picked'
+                : 'controll-panel__button'
+            }
           >
             Журнал поменбше
           </button>
@@ -118,7 +123,11 @@ function Journals() {
             onClick={() => {
               setCurrentJournalName('bigJournal');
             }}
-            className="controll-panel__button"
+            className={
+              currentJournalName == 'bigJournal'
+                ? 'controll-panel__button controll-panel__button-picked'
+                : 'controll-panel__button'
+            }
           >
             Журнал поболбше
           </button>
@@ -126,6 +135,16 @@ function Journals() {
         <section className="kostyl">
           {currentJournalName == 'bigJournal' && (
             <>
+              <button
+                onClick={() => {
+                  setCurrentMode('create');
+                  setCurrentNote(emptyBJN);
+                  setIsBigPopupOpened(true);
+                }}
+                className="big-journal__create-button"
+              >
+                Создать запись в журнале побольбше
+              </button>
               <section className="big-journal__header">
                 Дата поступления / Номер колесной пары
               </section>
@@ -143,6 +162,16 @@ function Journals() {
           )}
           {currentJournalName == 'smallJournal' && (
             <>
+              <button
+                onClick={() => {
+                  setCurrentMode('create');
+                  setCurrentNote(emptySJN);
+                  setIsSmallPopupOpened(true);
+                }}
+                className="big-journal__create-button"
+              >
+                Создать запись в журнале поменьбше
+              </button>
               <section className="big-journal__header">
                 Номер диаграммы / Номер колесной пары
               </section>

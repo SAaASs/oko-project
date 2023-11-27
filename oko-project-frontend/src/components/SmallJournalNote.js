@@ -2,7 +2,6 @@ import React from 'react';
 import { PickedNoteContext } from '../contexts/PickedNoteContext';
 function SmallJournalNote({ note }) {
   const pickedNote = React.useContext(PickedNoteContext);
-  console.log(note);
   return (
     <>
       <section className="big-journal-note">
@@ -11,6 +10,7 @@ function SmallJournalNote({ note }) {
         <button
           onClick={() => {
             pickedNote.setCurrentNote(note);
+            pickedNote.setCurrentMode('edit');
             pickedNote.setIsSmallPopupOpened(true);
           }}
           className="big-journal-note__expand"
