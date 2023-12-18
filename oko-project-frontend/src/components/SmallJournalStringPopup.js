@@ -58,15 +58,31 @@ function SmallJournalStringPopup() {
       mastersAcception,
     };
     if (pickedNote.currentMode == 'create') {
-      api.createSmallNote(result).then(() => {
-        alert('Запись успешно создана');
-        pickedNote.setIsSmallPopupOpened(false);
-      });
+      api
+        .createSmallNote(result)
+        .then(() => {
+          alert('Запись успешно создана');
+          pickedNote.setIsSmallPopupOpened(false);
+        })
+        .catch((err) => {
+          alert(
+            err.message,
+            'Похоже вы ввели неподходищие данные в одно из полей'
+          );
+        });
     } else if (pickedNote.currentMode == 'edit') {
-      api.patchSmallNote(result, pickedNote.currentNote._id).then(() => {
-        alert('Запись успешно изменена');
-        pickedNote.setIsSmallPopupOpened(false);
-      });
+      api
+        .patchSmallNote(result, pickedNote.currentNote._id)
+        .then(() => {
+          alert('Запись успешно изменена');
+          pickedNote.setIsSmallPopupOpened(false);
+        })
+        .catch((err) => {
+          alert(
+            err.message,
+            'Похоже вы ввели неподходищие данные в одно из полей'
+          );
+        });
     }
   };
   return (
@@ -91,84 +107,84 @@ function SmallJournalStringPopup() {
               inputValueChanger={setNoteNumber}
               inputName={'Номер по порядку'}
               inputFormName={'noteNumber'}
-              regexp={''}
+              regexp={/^[0-9]{1,30}$/}
             ></PopupField>
             <PopupField
               inputValue={diagramId}
               inputValueChanger={setDiagramId}
               inputName={'Номер диаграммы'}
               inputFormName={'diagramId'}
-              regexp={''}
+              regexp={/^[0-9]{1,30}$/}
             ></PopupField>
             <PopupField
               inputValue={pressEquipDate}
               inputValueChanger={setPressEquipDate}
               inputName={'Дата прессовой посадки на ось'}
               inputFormName={'pressEquipDate'}
-              regexp={''}
+              regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
             ></PopupField>
             <PopupField
               inputValue={pairId}
               inputValueChanger={setPairId}
               inputName={'Индивидуальный номер оси(колесной пары)'}
               inputFormName={'pairId'}
-              regexp={''}
+              regexp={/^[0-9]{1,30}$/}
             ></PopupField>
             <PopupField
               inputValue={pairFullMarkLeft}
               inputValueChanger={setPairFullMarkLeft}
               inputName={'Полная маркировка колеса слева'}
               inputFormName={'pairFullMarkLeft'}
-              regexp={''}
+              regexp={/^\d{2}-\d{2}-\d{5,6}$/}
             ></PopupField>
             <PopupField
               inputValue={pairFullMarkRight}
               inputValueChanger={setPairFullMarkRight}
               inputName={'Полная маркировка колеса справа'}
               inputFormName={'pairFullMarkRight'}
-              regexp={''}
+              regexp={/^\d{2}-\d{2}-\d{5,6}$/}
             ></PopupField>
             <PopupField
               inputValue={hubDiameterLeft}
               inputValueChanger={setHubDiameterLeft}
               inputName={'Диаметр ступицы колеса слева'}
               inputFormName={'hubDiameterLeft'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={hubDiameterRight}
               inputValueChanger={setHubDiameterRight}
               inputName={'Диаметр ступицы колеса справа'}
               inputFormName={'hubDiameterRight'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={tensionLeft}
               inputValueChanger={setTensionLeft}
               inputName={'натягб мм слева'}
               inputFormName={'tensionLeft'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={tensionRight}
               inputValueChanger={setTensionRight}
               inputName={'натягб мм справа'}
               inputFormName={'tensionRight'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={pressurePowerUpLeft}
               inputValueChanger={setPressurePowerUpLeft}
               inputName={'Усилие запрессовки кН (то) слева'}
               inputFormName={'pressurePowerUpLeft'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={pressurePowerUpRight}
               inputValueChanger={setPressurePowerUpRight}
               inputName={'Усилие запрессовки кН (то) справа'}
               inputFormName={'pressurePowerUpRight'}
-              regexp={''}
+              regexp={/^\d{1,10}\.\d{1,10}$/}
             ></PopupField>
             <PopupField
               inputValue={distanceBetweenInnerAndSide}
@@ -177,24 +193,25 @@ function SmallJournalStringPopup() {
                 'Расстояние между внутренними и боковыми гранями ободов колес'
               }
               inputFormName={'distanceBetweenInnerAndSide'}
-              regexp={''}
+              regexp={/^\d{1,10}(-\d{1,10})?$/}
             ></PopupField>
             <PopupField
               inputValue={goodOrBad}
               inputValueChanger={setGoodOrBad}
               inputName={'Заключение о годности'}
               inputFormName={'goodOrBad'}
-              regexp={''}
+              regexp={/^[01]$/}
             ></PopupField>
             <PopupField
               inputValue={mastersAcception}
               inputValueChanger={setMastersAcception}
               inputName={'Подпись мастера'}
               inputFormName={'mastersAcception'}
-              regexp={''}
+              regexp={/^[01]$/}
             ></PopupField>
             <div className="full-string-popup__submit-button-wrapper">
               <button
+                disabled={pickedNote.errString.length > 0}
                 type="submit"
                 className="full-string-popup__submit-button"
               >

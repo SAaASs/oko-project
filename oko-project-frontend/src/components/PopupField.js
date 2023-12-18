@@ -8,29 +8,41 @@ function FullStringPopupInput({
   regexp,
 }) {
   const pickedNote = React.useContext(PickedNoteContext);
-  const [amIBand, setAmIBad] = React.useState();
+  const [isValid, setIsValid] = React.useState(
+    !pickedNote.errString.includes(inputFormName) &
+      (pickedNote.currentMode == 'edit')
+  );
   return (
     <>
       <div className="full-string-popup-field__wrapper">
-        <p className="full-string-popup-field__name">{inputName}</p>
+        <p
+          className={
+            isValid
+              ? 'full-string-popup-field__name'
+              : 'full-string-popup-field__name full-string-popup-field__name-red'
+          }
+        >
+          {inputName}
+        </p>
         <input
           className="full-string-popup-field__input"
           name={inputFormName}
           onInput={(e) => {
             inputValueChanger(e.target.value);
-            if (inputValue.match(regexp)) {
-              setAmIBad(false);
+            if (e.target.value.match(regexp)) {
+              setIsValid(true);
+              pickedNote.setErrString(
+                pickedNote.errString.replace(inputFormName, '')
+              );
             } else {
-              setAmIBad(true);
+              setIsValid(false);
+              pickedNote.setErrString(
+                pickedNote.errString.replace(inputFormName, '') + inputFormName
+              );
             }
           }}
           value={inputValue}
         ></input>
-        {amIBand && (
-          <span className="full-string-popup-field__error">
-            Вы насрали в инпут, убирайте
-          </span>
-        )}
       </div>
     </>
   );

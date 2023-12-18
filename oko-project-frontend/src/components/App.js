@@ -49,6 +49,12 @@ function App() {
             }
           />
           <Route path="/sign-in" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRouteElement isLoggedIn={false} element={Register} />
+            }
+          />
           <Route path="/sign-up" element={<Register />} />
           <Route />
           <Route path="*" element={<NotFound />} />

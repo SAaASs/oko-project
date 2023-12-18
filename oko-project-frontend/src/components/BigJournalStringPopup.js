@@ -231,7 +231,6 @@ function FullStringPopup() {
     );
   }, [pickedNote.currentNote]);
   const editHandler = () => {
-    console.log('editHandler');
     const result = {
       noteNumber,
       arrivalDate,
@@ -280,15 +279,31 @@ function FullStringPopup() {
       signatureWheelsetReprofiling,
     };
     if (pickedNote.currentMode == 'create') {
-      api.createBigNote(result).then(() => {
-        alert('Запись успешно создана');
-        pickedNote.setIsBigPopupOpened(false);
-      });
+      api
+        .createBigNote(result)
+        .then(() => {
+          alert('Запись успешно создана');
+          pickedNote.setIsBigPopupOpened(false);
+        })
+        .catch((err) => {
+          alert(
+            err.message,
+            'Похоже вы ввели неподходищие данные в одно из полей'
+          );
+        });
     } else if (pickedNote.currentMode == 'edit') {
-      api.patchBigNote(result, pickedNote.currentNote._id).then(() => {
-        alert('Запись успешно изменена');
-        pickedNote.setIsBigPopupOpened(false);
-      });
+      api
+        .patchBigNote(result, pickedNote.currentNote._id)
+        .then(() => {
+          alert('Запись успешно изменена');
+          pickedNote.setIsBigPopupOpened(false);
+        })
+        .catch((err) => {
+          alert(
+            err.message,
+            'Похоже вы ввели неподходищие данные в одно из полей'
+          );
+        });
     }
   };
 
@@ -305,7 +320,7 @@ function FullStringPopup() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('submit');
+              console.log('submit', pickedNote.errString);
               editHandler();
             }}
             className="full-string-popup__form"
@@ -316,14 +331,14 @@ function FullStringPopup() {
                 inputValueChanger={setNoteNumber}
                 inputName={'Номер по порядку'}
                 inputFormName={'noteNumber'}
-                regexp={''}
+                regexp={/^[0-9]{1,30}$/}
               ></PopupField>
               <PopupField
                 inputValue={arrivalDate}
                 inputValueChanger={setArrivalDate}
                 inputName={'Дата послупления'}
                 inputFormName={'arrivalDate'}
-                regexp={''}
+                regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
               ></PopupField>
               <PopupField
                 inputValue={soureceName}
@@ -332,7 +347,7 @@ function FullStringPopup() {
                   'Наименовае завода или пункта откуда поступила колесная пара, или номер вагона из пол которого она выкачена'
                 }
                 inputFormName={'soureceName'}
-                regexp={''}
+                regexp={/^[а-яА-Я0-9]{1,30}$/}
               ></PopupField>
               <PopupFieldWrapper categoryName={'Харрактеристика колесной пары'}>
                 <PopupField
@@ -340,14 +355,14 @@ function FullStringPopup() {
                   inputValueChanger={setType}
                   inputName={'Тип колесной пары'}
                   inputFormName={'type'}
-                  regexp={''}
+                  regexp={/^[а-яА-Я0-9]{1,30}$/}
                 ></PopupField>
                 <PopupField
                   inputValue={pairId}
                   inputValueChanger={setPairId}
                   inputName={'Номер колесной пары'}
                   inputFormName={'pairId'}
-                  regexp={''}
+                  regexp={/^[0-9]{1,30}$/}
                 ></PopupField>
                 <PopupFieldWrapper categoryName={'Дата и пункт'}>
                   <PopupField
@@ -355,14 +370,14 @@ function FullStringPopup() {
                     inputValueChanger={setAssemblyDate}
                     inputName={'Изготовления оси'}
                     inputFormName={'assemblyDate'}
-                    regexp={''}
+                    regexp={/^\d{4}-\d{2}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={lastFormationDate}
                     inputValueChanger={setLastFormationDate}
                     inputName={'Последнего формирования'}
                     inputFormName={'lastFormationDate'}
-                    regexp={''}
+                    regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
                   ></PopupField>
                   <PopupField
                     inputValue={lastExaminationDate}
@@ -371,7 +386,7 @@ function FullStringPopup() {
                       'Последнего полного освидетельствования колесной пары и монтажа букс для роликовых колесных пар'
                     }
                     inputFormName={'lastExaminationDate'}
-                    regexp={''}
+                    regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
                   ></PopupField>
                 </PopupFieldWrapper>
                 <PopupField
@@ -379,14 +394,14 @@ function FullStringPopup() {
                   inputValueChanger={setWheelDiameterLeft}
                   inputName={'Диаметр по кругу катания колеса-левое'}
                   inputFormName={'wheelDiameterLeft'}
-                  regexp={''}
+                  regexp={/^\d{3}$/}
                 ></PopupField>
                 <PopupField
                   inputValue={wheelDiameterRight}
                   inputValueChanger={setWheelDiameterRight}
                   inputName={'Диаметр по кругу катания колеса-правое'}
                   inputFormName={'wheelDiameterRight'}
-                  regexp={''}
+                  regexp={/^\d{3}$/}
                 ></PopupField>
               </PopupFieldWrapper>
             </PopupFieldWrapper>
@@ -396,7 +411,7 @@ function FullStringPopup() {
                 inputValueChanger={setDateOfDispatchOrReleaseOnBail}
                 inputName={'Дата отправки или подкатки под вагон'}
                 inputFormName={'dateOfDispatchOrReleaseOnBail'}
-                regexp={''}
+                regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
               ></PopupField>
               <PopupField
                 inputValue={destination}
@@ -405,7 +420,7 @@ function FullStringPopup() {
                   'Наименование завода или пункта куда направлена колесная пара или номер вагона под который она подкачена'
                 }
                 inputFormName={'destination'}
-                regexp={''}
+                regexp={/^[а-яА-Я0-9]{1,30}$/}
               ></PopupField>
               <PopupFieldWrapper categoryName={'Размер колесной пары(мм)'}>
                 <PopupFieldWrapper categoryName={'Диаметр оси'}>
@@ -414,42 +429,42 @@ function FullStringPopup() {
                     inputValueChanger={setAxisAnteriorPartLeft}
                     inputName={'Диаметр оси в предступичной части-левый'}
                     inputFormName={'axisAnteriorPartLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={axisAnteriorPartRight}
                     inputValueChanger={setAxisAnteriorPartRight}
                     inputName={'Диаметр оси в предступичной части-правый'}
                     inputFormName={'axisAnteriorPartRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={axisHubPartLeft}
                     inputValueChanger={setAxisHubPartLeft}
                     inputName={'Диаметр оси в подступичной части-левый'}
                     inputFormName={'axisHubPartLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={axisHubPartRight}
                     inputValueChanger={setAxisHubPartRight}
                     inputName={'Диаметр оси в подступичной части-правый'}
                     inputFormName={'axisHubPartRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={axisMiddlePartLeft}
                     inputValueChanger={setAxisMiddlePartLeft}
                     inputName={'Посередине-левый'}
                     inputFormName={'axisMiddlePartLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={axisMiddlePartRight}
                     inputValueChanger={setAxisMiddlePartRight}
                     inputName={'Посередине-правый'}
                     inputFormName={'axisMiddlePartRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                 </PopupFieldWrapper>
                 <PopupFieldWrapper categoryName={'Колеса'}>
@@ -458,77 +473,77 @@ function FullStringPopup() {
                     inputValueChanger={setWheelRimThicknessLeft}
                     inputName={'Толщина обода-левый'}
                     inputFormName={'wheelRimThicknessLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelRimThicknessRight}
                     inputValueChanger={setWheelRimThicknessRight}
                     inputName={'Толщина обода-правый'}
                     inputFormName={'wheelRimThicknessRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelRollingLeft}
                     inputValueChanger={setWheelRollingLeft}
                     inputName={'Прокат-левый'}
                     inputFormName={'wheelRollingLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelRollingRight}
                     inputValueChanger={setWheelRollingRight}
                     inputName={'Прокат-левый'}
                     inputFormName={'wheelRollingRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelDiscThicknessLeft}
                     inputValueChanger={setWheelDiscThicknessLeft}
                     inputName={'Толщина диска-левый'}
                     inputFormName={'wheelDiscThicknessLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelDiscThicknessRight}
                     inputValueChanger={setWheelDiscThicknessRight}
                     inputName={'Толщина диска-правый'}
                     inputFormName={'wheelDiscThicknessRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={wheelRidgeThicknessLeft}
                     inputValueChanger={setWheelRidgeThicknessLeft}
                     inputName={'Толщина гребня-левый'}
                     inputFormName={'wheelRidgeThicknessLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
-                    inputValue={wheelRimThicknessRight}
+                    inputValue={wheelRidgeThicknessRight}
                     inputValueChanger={setWheelRidgeThicknessRight}
                     inputName={'Толщина гребня-правый'}
                     inputFormName={'wheelRidgeThicknessRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={rollingCircleDiameterLeft}
                     inputValueChanger={setRollingCircleDiameterLeft}
                     inputName={'Диаметр по кругу катания-левый'}
                     inputFormName={'rollingCircleDiameterLeft'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={rollingCircleDiameterRight}
                     inputValueChanger={setRollingCircleDiameterRight}
                     inputName={'Диаметр по кругу катания-правый'}
                     inputFormName={'rollingCircleDiameterRight'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                   <PopupField
                     inputValue={distanceBetweenInternalEdges}
                     inputValueChanger={setDistanceBetweenInternalEdges}
                     inputName={'Расстояние между внутренними гранями'}
                     inputFormName={'distanceBetweenInternalEdges'}
-                    regexp={''}
+                    regexp={/^[0-9]{1,30}$/}
                   ></PopupField>
                 </PopupFieldWrapper>
               </PopupFieldWrapper>
@@ -539,21 +554,21 @@ function FullStringPopup() {
                 inputValueChanger={setRepairAxisChange}
                 inputName={'Смена оси'}
                 inputFormName={'repairAxisChange'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupField
                 inputValue={repairSolidRolledChange}
                 inputValueChanger={setRepairSolidRolledChange}
                 inputName={'Смена цельнокатанных колес'}
                 inputFormName={'repairSolidRolledChange'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupField
                 inputValue={repairFormedFromOldWheels}
                 inputValueChanger={setRepairFormedFromOldWheels}
                 inputName={'Смена из старо-годных колес'}
                 inputFormName={'repairFormedFromOldWheels'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupFieldWrapper categoryName={'Полная ревизия роликовых букс'}>
                 <PopupField
@@ -565,7 +580,7 @@ function FullStringPopup() {
                   inputFormName={
                     'completeInspectionOfRollerAxleBoxesWithTurning'
                   }
-                  regexp={''}
+                  regexp={/^[01]$/}
                 ></PopupField>
                 <PopupField
                   inputValue={completeInspectionOfRollerAxleBoxesWithoutTurning}
@@ -576,7 +591,7 @@ function FullStringPopup() {
                   inputFormName={
                     'completeInspectionOfRollerAxleBoxesWithoutTurning'
                   }
-                  regexp={''}
+                  regexp={/^[01]$/}
                 ></PopupField>
               </PopupFieldWrapper>
               <PopupField
@@ -584,7 +599,7 @@ function FullStringPopup() {
                 inputValueChanger={setRestorationOfTheRollerAxleJournalThread}
                 inputName={'Восстановление резьбы шейки роликовой оси'}
                 inputFormName={'restorationOfTheRollerAxleJournalThread'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupFieldWrapper
                 categoryName={'Промежуточная ревизия роликовых букс'}
@@ -598,7 +613,7 @@ function FullStringPopup() {
                   inputFormName={
                     'intermediateRevisionOfRollerAxleBoxesWithTurning'
                   }
-                  regexp={''}
+                  regexp={/^[01]$/}
                 ></PopupField>
                 <PopupField
                   inputValue={
@@ -611,7 +626,7 @@ function FullStringPopup() {
                   inputFormName={
                     'intermediateRevisionOfRollerAxleBoxesWithoutTurning'
                   }
-                  regexp={''}
+                  regexp={/^[01]$/}
                 ></PopupField>
               </PopupFieldWrapper>
               <PopupField
@@ -619,7 +634,7 @@ function FullStringPopup() {
                 inputValueChanger={setOtherWorks}
                 inputName={'Прочие работы'}
                 inputFormName={'otherWorks'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
             </PopupFieldWrapper>
             <PopupField
@@ -627,7 +642,7 @@ function FullStringPopup() {
               inputValueChanger={setFullInspectionDate}
               inputName={'Дата полного освидетельствования колесной пары'}
               inputFormName={'fullInspectionDate'}
-              regexp={''}
+              regexp={/^[0-9]{2}[\.]{1}[0-9]{2}[\.]{1}[0-9]{4}$/g}
             ></PopupField>
             <PopupFieldWrapper
               categoryName={'Подпись лица проводившего проверку дефектоскопом'}
@@ -637,28 +652,28 @@ function FullStringPopup() {
                 inputValueChanger={setSignatureForDefectsNeckAndSomeOtherThing}
                 inputName={'Шейки и предюлступичной части оси'}
                 inputFormName={'signatureForDefectsNeckAndSomeOtherThing'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupField
                 inputValue={signatureForDefectsHalfHubAxis}
                 inputValueChanger={setSignatureForDefectsHalfHubAxis}
                 inputName={'Подступичной части оси'}
                 inputFormName={'signatureForDefectsHalfHubAxis'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupField
                 inputValue={signatureForDefectsInnerRingsOnAxisNeck}
                 inputValueChanger={setSignatureForDefectsInnerRingsOnAxisNeck}
                 inputName={'Внутренних колец на шейке оси'}
                 inputFormName={'signatureForDefectsInnerRingsOnAxisNeck'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
               <PopupField
                 inputValue={signatureForDefectsMiddleAxisPart}
                 inputValueChanger={setSignatureForDefectsMiddleAxisPart}
                 inputName={'Средней части оси'}
                 inputFormName={'signatureForDefectsMiddleAxisPart'}
-                regexp={''}
+                regexp={/^[01]$/}
               ></PopupField>
             </PopupFieldWrapper>
             <PopupField
@@ -666,17 +681,18 @@ function FullStringPopup() {
               inputValueChanger={setSignatureWheelsetAcceptance}
               inputName={'Подпись лица проводившего приемку колесной пары'}
               inputFormName={'signatureWheelsetAcceptance'}
-              regexp={''}
+              regexp={/^[01]$/}
             ></PopupField>
             <PopupField
               inputValue={signatureWheelsetReprofiling}
               inputValueChanger={setSignatureWheelsetReprofiling}
               inputName={'Подпись лица проводившего подкатку колесной пары'}
               inputFormName={'signatureWheelsetReprofiling'}
-              regexp={''}
+              regexp={/^[01]$/}
             ></PopupField>
             <div className="full-string-popup__submit-button-wrapper">
               <button
+                disabled={pickedNote.errString.length > 0}
                 type="submit"
                 className="full-string-popup__submit-button"
               >

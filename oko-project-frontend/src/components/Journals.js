@@ -81,6 +81,7 @@ function Journals() {
   const [isSmallPopupOpened, setIsSmallPopupOpened] = React.useState(false);
   const [currentJournalName, setCurrentJournalName] =
     React.useState('smallJournal');
+  const [errString, setErrString] = React.useState('');
   React.useEffect(() => {
     Promise.all([api.getAllBJNs(), api.getAllSJNs()]).then(([BJNs, SJNs]) => {
       setBigJournalNoteList(BJNs);
@@ -99,6 +100,8 @@ function Journals() {
           setIsSmallPopupOpened,
           currentMode,
           setCurrentMode,
+          errString,
+          setErrString,
         }}
       >
         {isBigPopupOpened && <FullStringPopup></FullStringPopup>}
@@ -117,7 +120,7 @@ function Journals() {
                 : 'controll-panel__button'
             }
           >
-            Журнал поменбше
+            Журнал ВУ-51
           </button>
           <button
             onClick={() => {
@@ -129,7 +132,7 @@ function Journals() {
                 : 'controll-panel__button'
             }
           >
-            Журнал поболбше
+            Журнал ВУ-53
           </button>
         </section>
         <section className="kostyl">
@@ -143,7 +146,7 @@ function Journals() {
                 }}
                 className="big-journal__create-button"
               >
-                Создать запись в журнале побольбше
+                Создать запись в журнале ВУ-53
               </button>
               <section className="big-journal__header">
                 Дата поступления / Номер колесной пары
@@ -170,7 +173,7 @@ function Journals() {
                 }}
                 className="big-journal__create-button"
               >
-                Создать запись в журнале поменьбше
+                Создать запись в журнале ВУ-51
               </button>
               <section className="big-journal__header">
                 Номер диаграммы / Номер колесной пары

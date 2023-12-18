@@ -30,6 +30,10 @@
     width: 200px;
     height: 50px;
 }
+.full-string-popup__submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .full-string-popup__submit-button-wrapper {
     width: 100%;
     display: flex;
@@ -54,6 +58,9 @@
 .full-string-popup-field__name {
     font-family: Inter;
     font-size: 14px;
+}
+.full-string-popup-field__name-red {
+    color: red;
 }
 .full-string-popup-field__input {
     border: none;
